@@ -15,12 +15,12 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { AlertCircle, Eye, EyeOff } from "lucide-react";
+import {  Eye, EyeOff } from "lucide-react";
 import Spinner from "@/components/Spinner";
+import { useSignIn } from "../hook/useAuth";
 
 const SignInSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -30,8 +30,8 @@ const SignInSchema = z.object({
 });
 
 export const SignInForm = () => {
-    const [isEyeOpen , setIsEyeOpen] = useState(false)
-    const [error , setError] = useState(false)
+    const {loading , onSignIn} = useSignIn()
+    const [isEyeOpen , setIsEyeOpen] = useState(false);
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
         defaultValues: {
@@ -41,7 +41,7 @@ export const SignInForm = () => {
     })
 
     const onSubmit = () => {
-
+        onSignIn("")
     }
 
 
@@ -131,20 +131,12 @@ export const SignInForm = () => {
                             />
 
                         </div>
-                        {!!error && (
-                            <Alert className="bg-destructive/10 border-none">
-                                <AlertCircle className=" size-4 !text-destructive" />
-                                <AlertTitle className="text-destructive">
-                                    {error}
-                                </AlertTitle>
-                            </Alert>
-                        )}
                         <Button
                             type="submit"
                             // disabled={loading}
                             className="w-full cursor-pointer"
                         >
-                            {false ? <Spinner size="sm" color="white" /> : "Sign in"}
+                            {loading ? <Spinner size="sm"  /> : "Sign in"}
                         </Button>
                     </form>
                 </Form>

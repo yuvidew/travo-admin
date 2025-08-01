@@ -15,12 +15,13 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import Spinner from "@/components/Spinner";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { AlertCircle, Eye, EyeOff } from "lucide-react";
-import Spinner from "@/components/Spinner";
+import {  Eye, EyeOff } from "lucide-react";
+import { useSignUp } from "../hook/useAuth";
 
 const SignInSchema = z.object({
     name: z.string().email("Invalid name address"),
@@ -31,8 +32,8 @@ const SignInSchema = z.object({
 });
 
 export const SignUpForm = () => {
-    const [isEyeOpen , setIsEyeOpen] = useState(false)
-    const [error , setError] = useState(false)
+    const {loading , onSignUp} = useSignUp()
+    const [isEyeOpen , setIsEyeOpen] = useState(false);
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
         defaultValues: {
@@ -43,7 +44,7 @@ export const SignUpForm = () => {
     })
 
     const onSubmit = () => {
-
+        onSignUp("")
     }
 
 
@@ -155,20 +156,12 @@ export const SignUpForm = () => {
                             />
 
                         </div>
-                        {!!error && (
-                            <Alert className="bg-destructive/10 border-none">
-                                <AlertCircle className=" size-4 !text-destructive" />
-                                <AlertTitle className="text-destructive">
-                                    {error}
-                                </AlertTitle>
-                            </Alert>
-                        )}
                         <Button
                             type="submit"
                             // disabled={loading}
                             className="w-full cursor-pointer"
                         >
-                            {false ? <Spinner size="sm" color="white" /> : "Sign up"}
+                            {loading ? <Spinner size="sm"  /> : "Sign up"}
                         </Button>
                     </form>
                 </Form>
