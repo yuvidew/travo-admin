@@ -107,6 +107,7 @@ export const OtpForm = () => {
                     <Button 
                         type="submit"
                         className='w-full'
+                        disabled = {loading}
                     >
                         {loading ? <Spinner size="sm" /> : "Submit"}
                     </Button>

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 export const useSendOtp = () => {
     const router = useRouter();
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Sends the OTP to the backend for verification.
@@ -21,43 +21,45 @@ export const useSendOtp = () => {
      * @param {{ pin: string }} form - Object containing the OTP as a string.
      */
 
-    const onSendOTP = async(form : {pin : string}) => {
+    const onSendOTP = async (form: { pin: string }) => {
         setLoading(true);
         try {
 
             const userEmail = localStorage.getItem("travo-user-email")
-            const {data , status} = await axios.post(endPoints.verify_otp , {email : userEmail , pin : Number(form.pin)});
+            const { data, status } = await axios.post(endPoints.verify_otp, { email: userEmail, pin: Number(form.pin) });
 
-            if(status === 200){
+            if (status === 200) {
                 toast.success(data.message);
 
-                localStorage.setItem("travo-token" , data.token);
-                localStorage.setItem("travo-user" , JSON.stringify(data.user))
+                localStorage.setItem("travo-token", data.token);
+                localStorage.setItem("travo-user", JSON.stringify(data.user));
+
+                localStorage.removeItem("travo-user-email");
 
                 setTimeout(() => {
                     router.replace("/");
-                } , 2000); 
-            }else if (status === 409){
+                }, 2000);
+            } else if (status === 409) {
                 toast.error(data.message);
             }
         } catch (error) {
-            console.log("Error to send otp" , error);
-            if(axios.isAxiosError(error)){
-                if(error.response?.status === 401){
+            console.log("Error to send otp", error);
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
                     toast.error(error.message);
                 }
-            }else {
+            } else {
                 toast.error("An unexpected error occurred.", {
                     duration: 4000,
                     position: "top-center",
                 });
             }
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
 
-    return { loading , onSendOTP}
+    return { loading, onSendOTP }
 }
 
 /**
@@ -67,46 +69,46 @@ export const useSendOtp = () => {
  */
 export const useSignUp = () => {
     const router = useRouter()
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Handles user sign-up and redirects to sign-in page on success.
      *
      * @param {AuthFormType} form - User credentials for sign-up.
      */
-    const onSignUp = async(form : AuthFormType) => {
+    const onSignUp = async (form: AuthFormType) => {
         setLoading(true)
         try {
-            const {data , status} = await axios.post(endPoints.signup , form);
+            const { data, status } = await axios.post(endPoints.signup, form);
 
-            if(status === 200){
+            if (status === 200) {
                 toast.success("Successfully sign up.");
                 setTimeout(() => {
                     router.replace("/sign-in");
-                } , 2000); 
-            }else if (status === 409){
+                }, 2000);
+            } else if (status === 409) {
                 toast.error(data.message);
             }
 
-        } catch (error : unknown) {
-            console.log("Error to sign up" , error);
+        } catch (error: unknown) {
+            console.log("Error to sign up", error);
 
-            if(axios.isAxiosError(error)){
-                if(error.response?.status === 401){
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
                     toast.error(error.message);
                 }
-            }else {
+            } else {
                 toast.error("An unexpected error occurred.", {
                     duration: 4000,
                     position: "top-center",
                 });
             }
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
 
-    return { loading , onSignUp}
+    return { loading, onSignUp }
 }
 
 /**
@@ -116,44 +118,209 @@ export const useSignUp = () => {
  */
 export const useSignIn = () => {
     const router = useRouter()
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Handles user sign-in and redirects to OTP page on success.
      *
      * @param {AuthFormType} form - User credentials for sign-in.
      */
-    const onSignIn = async(form : AuthFormType) => {
+    const onSignIn = async (form: AuthFormType) => {
         setLoading(true)
         try {
-            const {data , status} = await axios.post(endPoints.signin , form);
+            const { data, status } = await axios.post(endPoints.signin, form);
 
-            if(status === 200){
+            if (status === 200) {
                 toast.success(data.message);
-                localStorage.setItem("travo-user-email" , form.email)
+                localStorage.setItem("travo-user-email", form.email);
                 setTimeout(() => {
                     router.replace("/otp");
-                } , 2000); 
-            }else if (status === 409){
+                }, 2000);
+            } else if (status === 409) {
                 toast.error(data.message);
             }
         } catch (error) {
-            console.log("Error to sign in" , error);
+            console.log("Error to sign in", error);
 
-            if(axios.isAxiosError(error)){
-                if(error.response?.status === 401){
-                    toast.error(error.message);
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    toast.error("Invalid email and password.");
                 }
-            }else {
+            } else {
                 toast.error("An unexpected error occurred.", {
                     duration: 4000,
                     position: "top-center",
                 });
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return { loading, onSignIn }
+}
+
+/**
+ * Hook to verify user email before registration.
+ * 
+ * @returns {Object} - loading state and onVerifyEmail function
+ */
+export const useVerifyEmail = () => {
+    const [loading, setLoading] = useState(false);
+
+    /**
+     * Verify email address by sending it to the server.
+     *
+     * @param {{ email: string }} form - Form object containing the user's email
+     * @returns {Promise<boolean>} - Returns true if verification successful, false otherwise
+     */
+    const onVerifyEmail = async (form: { email: string }) => {
+        setLoading(true);
+
+        try {
+            const { data, status } = await axios.post(endPoints.verify_email, form);
+
+            if (status === 200) {
+                toast.success(data.message);
+                localStorage.setItem("travo-user-email", form.email)
+                return data.success;
+            } else if (status === 409) {
+                toast.error(data.message);
+
+                return false;
+            }
+
+        } catch (error) {
+            console.log("Error to verify email", error);
+
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    toast.error(error.message);
+                    return false;
+                }
+
+                return false;
+
+            } else {
+                toast.error("An unexpected error occurred.", {
+                    duration: 4000,
+                    position: "top-center",
+                });
+                return false;
             }
         }finally{
             setLoading(false)
         }
     }
 
-    return { loading , onSignIn}
+    return {loading , onVerifyEmail}
+}
+
+/**
+ * Hook to verify OTP / PIN for password reset.
+ *
+ * @returns {Object} - loading state and onVerifyPassResetCode function
+ */
+export const useVerifyPassResetCode = () => {
+    const [loading , setLoading] = useState(false);
+
+    /**
+     * Verify OTP / PIN for resetting the password.
+     *
+     * @param {{ email: string, pin: number }} form - Form object containing email and pin
+     * @returns {Promise<boolean>} - Returns true if OTP is correct, false otherwise
+     */
+    const onVerifyPassResetCode = async (form : {email : string , pin : number}) => {
+        setLoading(true);
+
+        try {
+            const { data, status } = await axios.post(endPoints.verify_forget_pass_otp, form);
+
+            if (status === 200) {
+                toast.success(data.message);
+                return data.success;
+            } else if (status === 409) {
+                toast.error(data.message);
+
+                return false;
+            }
+        } catch (error) {
+            console.log("Error to verify reset pass otp", error);
+
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    toast.error(error.message);
+                    return false;
+                }
+
+                return false;
+
+            } else {
+                toast.error("An unexpected error occurred.", {
+                    duration: 4000,
+                    position: "top-center",
+                });
+                return false;
+            }
+        }finally{
+            setLoading(false);
+        }
+    } 
+
+    return {loading , onVerifyPassResetCode}
+}
+
+/**
+ * Hook to reset user password.
+ *
+ * @returns {Object} - loading state and onResetPassword function
+ */
+export const useResetPassword = () => {
+    const [loading , setLoading] = useState(false);
+
+    /**
+     * Reset user password by sending email and new password to the server.
+     *
+     * @param {{ email: string, newPassword: string }} form - Form object containing email and new password
+     * @returns {Promise<boolean>} - Returns true if password reset successful, false otherwise
+     */
+    const onResetPassword = async (form : {email : string , newPassword : string}) => {
+        setLoading(true);
+
+        try {
+            const {data , status} = await axios.put(endPoints.reset_password , form);
+
+            if (status === 200) {
+                toast.success(data.message);
+                localStorage.removeItem("travo-user-email");
+                return data.success;
+            } else if (status === 409) {
+                toast.error(data.message);
+
+                return false;
+            }
+        } catch (error) {
+            console.log("Error to reset password", error);
+
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    toast.error("Invalid email.");
+                    return false;
+                }
+
+                return false;
+
+            } else {
+                toast.error("An unexpected error occurred.", {
+                    duration: 4000,
+                    position: "top-center",
+                });
+                return false;
+            }
+        }finally{
+            setLoading(false);
+        }
+    } 
+
+    return {loading , onResetPassword}
 }
