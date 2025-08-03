@@ -32,7 +32,9 @@ export const useSendOtp = () => {
                 toast.success(data.message);
 
                 localStorage.setItem("travo-token" , data.token);
-                localStorage.setItem("travo-user" , JSON.stringify(data.user))
+                localStorage.setItem("travo-user" , JSON.stringify(data.user));
+
+                localStorage.removeItem("travo-user-email");
 
                 setTimeout(() => {
                     router.replace("/");
