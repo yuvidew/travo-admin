@@ -26,7 +26,7 @@ const SignInSchema = z.object({
     email: z.string().email("Invalid email address"),
     password: z
         .string()
-        .min(6, { message: "Password must be at least 6 characters long" }),
+        .min(6, { message: "Password must be at least 8 characters long" }),
 });
 
 export const SignInForm = () => {
@@ -111,7 +111,7 @@ export const SignInForm = () => {
                                             <FormLabel>Password</FormLabel>
 
                                             <Link 
-                                                href={"/reset-password"} 
+                                                href={"/forget-password"} 
                                                 className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                                             >
                                                 Forgot your password?

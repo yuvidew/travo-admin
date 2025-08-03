@@ -39,10 +39,6 @@ export const OtpForm = () => {
         }
     });
 
-    const onSubmit = () => {
-        console.log("the form" , form);
-    }
-
     return (
         <div className='flex flex-col gap-6'>
             <div className="flex flex-col gap-6">
@@ -83,7 +79,6 @@ export const OtpForm = () => {
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
-                            onSubmit();
                             form.handleSubmit(onSendOTP)();
                         }} 
                         className='w-full space-y-6'
