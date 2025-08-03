@@ -160,7 +160,7 @@ export const SignUpForm = () => {
                         </div>
                         <Button
                             type="submit"
-                            // disabled={loading}
+                            disabled={loading}
                             className="w-full cursor-pointer"
                         >
                             {loading ? <Spinner size="sm"  /> : "Sign up"}

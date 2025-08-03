@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 
 import Spinner from '@/components/Spinner';
 import Image from 'next/image';
+import { useVerifyPassResetCode } from '../hook/useAuth';
 
 interface Props {
     onComplete : () => void
@@ -32,6 +33,7 @@ const formSchema = z.object({
 });
 
 export const PasswordResetCodeForm = ({onComplete} : Props) => {
+  const {loading , onVerifyPassResetCode} = useVerifyPassResetCode();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,10 +41,15 @@ export const PasswordResetCodeForm = ({onComplete} : Props) => {
     }
   });
 
-  const onSubmit = (values : z.infer<typeof formSchema>) => {
+  const onSubmit = async (values : z.infer<typeof formSchema>) => {
     console.log("the otp value" , values);
+    const email = localStorage.getItem("travo-user-email") || "";
 
-    onComplete();
+    const isVerified = await onVerifyPassResetCode({email , pin : Number(values.pin)})
+
+    if(isVerified){
+      onComplete();
+    }
   }
 
   return (
@@ -112,8 +119,9 @@ export const PasswordResetCodeForm = ({onComplete} : Props) => {
           <Button
             type="submit"
             className='w-full'
+            disabled = {loading}
           >
-            {false ? <Spinner size="sm" /> : "Submit"}
+            {loading ? <Spinner size="sm" /> : "Submit"}
           </Button>
         </form>
       </Form>

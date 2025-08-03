@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 
 import Spinner from '@/components/Spinner';
 import Image from 'next/image';
+import { useVerifyEmail } from '../hook/useAuth';
 
 interface Props {
     onComplete: () => void
@@ -28,6 +29,7 @@ const forgetPasswordSchema = z.object({
 })
 
 export const EmailSendForm = ({ onComplete }: Props) => {
+    const {loading , onVerifyEmail} = useVerifyEmail();
     const form = useForm<z.infer<typeof forgetPasswordSchema>>({
         resolver: zodResolver(forgetPasswordSchema),
         defaultValues: {
@@ -35,10 +37,12 @@ export const EmailSendForm = ({ onComplete }: Props) => {
         }
     });
 
-    const onSubmit = (values: z.infer<typeof forgetPasswordSchema>) => {
-        console.log("forget password ", values);
+    const onSubmit = async (values: z.infer<typeof forgetPasswordSchema>) => {
+        const isVerified = await onVerifyEmail(values);
 
-        onComplete()
+        if(isVerified){
+            onComplete();
+        }
     }
 
     return (
@@ -100,10 +104,10 @@ export const EmailSendForm = ({ onComplete }: Props) => {
                     </div>
                     <Button
                         type="submit"
-                        // disabled={loading}
+                        disabled={loading}
                         className="w-full cursor-pointer"
                     >
-                        {false ? <Spinner size="sm" /> : "Submit"}
+                        {loading ? <Spinner size="sm" /> : "Submit"}
                     </Button>
                 </form>
             </Form>

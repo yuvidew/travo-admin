@@ -18,6 +18,7 @@ import Spinner from "@/components/Spinner";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { useResetPassword } from "../hook/useAuth";
 
 interface Props {
     onComplete: () => void;
@@ -33,6 +34,7 @@ const formSchema = z.object({
 });
 
 export const NewPasswordForm = ({ onComplete }: Props) => {
+    const {loading , onResetPassword} = useResetPassword();
     const [isEyeOpen, setIsEyeOpen] = useState<{
         newPasswordShow : boolean , 
         confirmPasswordShow : boolean
@@ -56,7 +58,14 @@ export const NewPasswordForm = ({ onComplete }: Props) => {
             toast.error("New Password and confirm password is dose not match")     
             return ;   
         }
-        onComplete();
+
+        const email = localStorage.getItem("travo-user-email") || "";
+
+        const isVerified = await onResetPassword({email , newPassword : values.newPassword});
+
+        if(isVerified){
+            onComplete();
+        }
     };
 
     return (
@@ -171,10 +180,10 @@ export const NewPasswordForm = ({ onComplete }: Props) => {
                     </div>
                     <Button
                         type="submit"
-                        // disabled={loading}
+                        disabled={loading}
                         className="w-full cursor-pointer"
                     >
-                        {false ? <Spinner size="sm" /> : "Sign in"}
+                        {loading ? <Spinner size="sm" /> : "Sign in"}
                     </Button>
                 </form>
             </Form>
