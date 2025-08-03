@@ -39,9 +39,8 @@ export const OtpForm = () => {
         }
     });
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log("the form data", data);
-        onSendOTP(data)
+    const onSubmit = () => {
+        console.log("the form" , form);
     }
 
     return (
@@ -71,8 +70,9 @@ export const OtpForm = () => {
                 <div className=' flex flex-col gap-4'>
                     <h3 className=' text-lg font-semibold'>Verify Your Email Address</h3>
                     <p className=' text-sm text-muted-foreground'>
-                        Please enter the 6-digit code we sent to <span className=' font-medium text-primary'>
-                            sample@gmail.com
+                        Please enter the 6-digit code we sent to {" "}
+                        <span className=' font-medium text-primary'>
+                            {!localStorage.getItem("travo-user-email") ?  ""  : localStorage.getItem("travo-user-email")}
                         </span>
                     </p>
                 </div>
@@ -81,7 +81,11 @@ export const OtpForm = () => {
                 {/* start to otp form */}
                 <Form {...form}>
                     <form
-                        onSubmit={form.handleSubmit(onSubmit)}
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            onSubmit();
+                            form.handleSubmit(onSendOTP)();
+                        }} 
                         className='w-full space-y-6'
                     >
                         <FormField
@@ -105,13 +109,13 @@ export const OtpForm = () => {
                                 </FormItem>
                             )}
                         />
-                    </form>
                     <Button 
                         type="submit"
-                        className=''
+                        className='w-full'
                     >
-                        {loading ? <Spinner/> : "Submit"}
+                        {loading ? <Spinner size="sm" /> : "Submit"}
                     </Button>
+                    </form>
                 </Form>
                 {/* end to otp form */}
             </div>

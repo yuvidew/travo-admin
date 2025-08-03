@@ -40,9 +40,6 @@ export const SignInForm = () => {
         },
     })
 
-    const onSubmit = () => {
-        onSignIn("")
-    }
 
 
     return (
@@ -73,7 +70,13 @@ export const SignInForm = () => {
                 </div>
 
                 <Form {...form} >
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                    <form 
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            form.handleSubmit(onSignIn)();
+                        }} 
+                        className="flex flex-col gap-6"
+                    >
                         <div className="grid gap-3">
 
                             <FormField
@@ -104,7 +107,16 @@ export const SignInForm = () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <div className=" flex items-center justify-between">
+                                            <FormLabel>Password</FormLabel>
+
+                                            <Link 
+                                                href={"/reset-password"} 
+                                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                                            >
+                                                Forgot your password?
+                                            </Link>
+                                        </div>
                                         <FormControl>
                                             <div className=" relative ">
                                                 <Input

@@ -24,7 +24,7 @@ import {  Eye, EyeOff } from "lucide-react";
 import { useSignUp } from "../hook/useAuth";
 
 const SignInSchema = z.object({
-    name: z.string().email("Invalid name address"),
+    name: z.string().min(3 , {message : "user name is required"}),
     email: z.string().email("Invalid email address"),
     password: z
         .string()
@@ -42,10 +42,6 @@ export const SignUpForm = () => {
             password: "",
         },
     })
-
-    const onSubmit = () => {
-        onSignUp("")
-    }
 
 
     return (
@@ -76,7 +72,13 @@ export const SignUpForm = () => {
                 </div>
 
                 <Form {...form} >
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                    <form 
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            form.handleSubmit(onSignUp)();
+                        }} 
+                        className="flex flex-col gap-6"
+                    >
                         <div className="grid gap-3">
                             <FormField
                                 control={form.control}
@@ -87,7 +89,7 @@ export const SignUpForm = () => {
                                         <FormControl>
                                             <Input
                                                 id="name"
-                                                type="name"
+                                                type="text"
                                                 placeholder="e.g. John due"
                                                 value={field.value}
                                                 onChange={field.onChange}
