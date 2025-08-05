@@ -139,7 +139,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                     height={20}
                                 />
                                 <span className="text-base font-semibold">
-                                    Trao
+                                    Travo
                                 </span>
                             </Link>
                         </SidebarMenuButton>
