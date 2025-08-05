@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -12,9 +13,11 @@ export default function Home() {
   }
   return (
     <main>
+      <SidebarTrigger/>
       <Button onClick={onLogout}>
         Logout
       </Button>
+
     </main>
   );
 }

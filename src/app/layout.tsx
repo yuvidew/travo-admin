@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
+import { SideBarProvider } from "@/components/providers/SideBarProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
   title: "Travo",
   description:
     "Travo is a travel admin dashboard for tracking users and managing travel plans with ease.",
-  icons : {
-    icon : "/logo.png",
+  icons: {
+    icon: "/logo.png",
   }
 };
 
@@ -35,10 +36,13 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-            defaultTheme="system"
+          defaultTheme="system"
         >
-        <Toaster/>
-        {children}
+          <SideBarProvider>
+
+            <Toaster />
+            {children}
+          </SideBarProvider>
         </ThemeProvider>
       </body>
     </html>
