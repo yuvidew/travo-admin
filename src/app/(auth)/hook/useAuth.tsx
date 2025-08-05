@@ -21,12 +21,11 @@ export const useSendOtp = () => {
      * @param {{ pin: string }} form - Object containing the OTP as a string.
      */
 
-    const onSendOTP = async (form: { pin: string }) => {
+    const onSendOTP = async (form: { pin: string, email: string }) => {
         setLoading(true);
         try {
 
-            const userEmail = localStorage.getItem("travo-user-email")
-            const { data, status } = await axios.post(endPoints.verify_otp, { email: userEmail, pin: Number(form.pin) });
+            const { data, status } = await axios.post(endPoints.verify_otp, { email: form.email, pin: Number(form.pin) });
 
             if (status === 200) {
                 toast.success(data.message);
@@ -46,7 +45,11 @@ export const useSendOtp = () => {
             console.log("Error to send otp", error);
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    toast.error(error.message);
+                    toast.error("Invalid email and password.");
+                    return false;
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
+                    return false;
                 }
             } else {
                 toast.error("An unexpected error occurred.", {
@@ -95,7 +98,9 @@ export const useSignUp = () => {
 
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    toast.error(error.message);
+                    toast.error("Invalid email and password.");
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
                 }
             } else {
                 toast.error("An unexpected error occurred.", {
@@ -138,6 +143,8 @@ export const useSignIn = () => {
                 }, 2000);
             } else if (status === 409) {
                 toast.error(data.message);
+            } else if (status === 400 || data.code === 400) {
+                toast.error(data.message);
             }
         } catch (error) {
             console.log("Error to sign in", error);
@@ -145,6 +152,8 @@ export const useSignIn = () => {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
                 }
             } else {
                 toast.error("An unexpected error occurred.", {
@@ -195,7 +204,10 @@ export const useVerifyEmail = () => {
 
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    toast.error(error.message);
+                    toast.error("Invalid email and password.");
+                    return false;
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
                     return false;
                 }
 
@@ -208,12 +220,12 @@ export const useVerifyEmail = () => {
                 });
                 return false;
             }
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
 
-    return {loading , onVerifyEmail}
+    return { loading, onVerifyEmail }
 }
 
 /**
@@ -222,7 +234,7 @@ export const useVerifyEmail = () => {
  * @returns {Object} - loading state and onVerifyPassResetCode function
  */
 export const useVerifyPassResetCode = () => {
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Verify OTP / PIN for resetting the password.
@@ -230,7 +242,7 @@ export const useVerifyPassResetCode = () => {
      * @param {{ email: string, pin: number }} form - Form object containing email and pin
      * @returns {Promise<boolean>} - Returns true if OTP is correct, false otherwise
      */
-    const onVerifyPassResetCode = async (form : {email : string , pin : number}) => {
+    const onVerifyPassResetCode = async (form: { email: string, pin: number }) => {
         setLoading(true);
 
         try {
@@ -249,7 +261,10 @@ export const useVerifyPassResetCode = () => {
 
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    toast.error(error.message);
+                    toast.error("Invalid email and password.");
+                    return false;
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
                     return false;
                 }
 
@@ -262,12 +277,12 @@ export const useVerifyPassResetCode = () => {
                 });
                 return false;
             }
-        }finally{
+        } finally {
             setLoading(false);
         }
-    } 
+    }
 
-    return {loading , onVerifyPassResetCode}
+    return { loading, onVerifyPassResetCode }
 }
 
 /**
@@ -276,7 +291,7 @@ export const useVerifyPassResetCode = () => {
  * @returns {Object} - loading state and onResetPassword function
  */
 export const useResetPassword = () => {
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Reset user password by sending email and new password to the server.
@@ -284,11 +299,11 @@ export const useResetPassword = () => {
      * @param {{ email: string, newPassword: string }} form - Form object containing email and new password
      * @returns {Promise<boolean>} - Returns true if password reset successful, false otherwise
      */
-    const onResetPassword = async (form : {email : string , newPassword : string}) => {
+    const onResetPassword = async (form: { email: string, newPassword: string }) => {
         setLoading(true);
 
         try {
-            const {data , status} = await axios.put(endPoints.reset_password , form);
+            const { data, status } = await axios.put(endPoints.reset_password, form);
 
             if (status === 200) {
                 toast.success(data.message);
@@ -304,7 +319,10 @@ export const useResetPassword = () => {
 
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    toast.error("Invalid email.");
+                    toast.error("Invalid email and password.");
+                    return false;
+                } else if(error.response?.status === 400){
+                    toast.error(error.response.data.message);
                     return false;
                 }
 
@@ -317,10 +335,10 @@ export const useResetPassword = () => {
                 });
                 return false;
             }
-        }finally{
+        } finally {
             setLoading(false);
         }
-    } 
+    }
 
-    return {loading , onResetPassword}
+    return { loading, onResetPassword }
 }

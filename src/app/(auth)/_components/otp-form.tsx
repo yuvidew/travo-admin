@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/input-otp"
 import { useSendOtp } from '../hook/useAuth';
 import Spinner from '@/components/Spinner';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 const formSchema = z.object({
     pin: z.string().min(6, {
@@ -31,6 +33,7 @@ const formSchema = z.object({
 })
 
 export const OtpForm = () => {
+    const [email , setEmail] = useState("")
     const {loading , onSendOTP} = useSendOtp()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,6 +41,21 @@ export const OtpForm = () => {
             pin: ""
         }
     });
+    const searchParams = useSearchParams();
+    
+    useEffect(() => {
+        const userParams = searchParams.get("user")
+        const sendEmail = userParams ? JSON.parse(userParams as string).email : "";
+
+        const localStorageEmail = localStorage.getItem("travo-user-email") || ""
+        setEmail(sendEmail || localStorageEmail)
+
+    } , [])
+
+
+    const onSubmit = (values : z.infer<typeof formSchema>) => {
+        onSendOTP({email , pin : values.pin})
+    }
 
     return (
         <div className='flex flex-col gap-6'>
@@ -68,7 +86,7 @@ export const OtpForm = () => {
                     <p className=' text-sm text-muted-foreground'>
                         Please enter the 6-digit code we sent to {" "}
                         <span className=' font-medium text-primary'>
-                            {!localStorage.getItem("travo-user-email") ?  ""  : localStorage.getItem("travo-user-email")}
+                            {email}
                         </span>
                     </p>
                 </div>
@@ -79,7 +97,7 @@ export const OtpForm = () => {
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
-                            form.handleSubmit(onSendOTP)();
+                            form.handleSubmit(onSubmit)();
                         }} 
                         className='w-full space-y-6'
                     >
@@ -114,6 +132,12 @@ export const OtpForm = () => {
                     </form>
                 </Form>
                 {/* end to otp form */}
+
+                <div className=' flex items-center justify-end'>
+                    <Link href={"/sign-in"} className=' text-primary hover:underline text-sm'>
+                            sign-in
+                    </Link>
+                </div>
             </div>
 
             <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">

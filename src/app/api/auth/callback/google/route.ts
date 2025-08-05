@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -5,23 +6,21 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const code = searchParams.get("code");
 
-        console.log("the code" , code );
-
         if (!code) {
             return new Response("No code provided", {
                 status: 400
             });
         }
 
-            const body = {
-                code,
-                client_id: process.env.GOOGLE_CLIENT_ID!,
-                client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-                redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
-                grant_type: "authorization_code"
-            }
+        const body = {
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID!,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+            redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
+            grant_type: "authorization_code"
+        }
 
-            
+
         const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: {
@@ -51,18 +50,27 @@ export async function GET(req: Request) {
             console.error("Google userinfo error:", await userInfoRes.text());
             return NextResponse.json({ error: "Failed to fetch user info" }, { status: 500 });
         };
-        
+
         const userInfo = await userInfoRes.json();
-        
+
         if (!userInfo.email) {
             return NextResponse.json({ error: "Google account has no email" }, { status: 500 });
         };
         console.log("the user data from the google ", userInfo);
 
-        // TODO : Integrate google-login backend api to Register or login user
-        
+        const internalRes = await fetch("http://localhost:2000/v1/auth/google-login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userInfo),
+        });
+
+        if (!internalRes.ok) {
+            const errorData = await internalRes.json()
+            return NextResponse.json({ error: errorData.message }, { status: errorData.status });
+        }
+
         return NextResponse.redirect(
-            `${process.env.NEXT_PUBLIC_CLIENT_URL}/sign-in?user=${encodeURIComponent(JSON.stringify(userInfo))}`
+            `${process.env.NEXT_PUBLIC_CLIENT_URL}/otp?user=${encodeURIComponent(JSON.stringify(userInfo))}`
         );
     } catch (error) {
         console.error("Error in OAuth callback:", error);
