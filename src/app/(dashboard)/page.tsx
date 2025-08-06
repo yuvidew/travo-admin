@@ -1,4 +1,5 @@
 "use client"
+// import { SettingModal } from "@/components/setting-modal";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ export default function Home() {
       <Button onClick={onLogout}>
         Logout
       </Button>
-
+    {/* <SettingModal/> */}
     </main>
   );
 }

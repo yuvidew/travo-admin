@@ -24,7 +24,6 @@ export const NavMain = ({
 }) => {
   const pathname = usePathname();
 
-  console.log("the pathsname" , pathname);
 
   return (
     <SidebarGroup>
