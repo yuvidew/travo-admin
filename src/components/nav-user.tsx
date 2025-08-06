@@ -23,6 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Bell, CreditCard, EllipsisVertical, LogOutIcon, UserCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
@@ -33,7 +34,16 @@ export function NavUser({
     picture: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const router = useRouter();
+  const { isMobile } = useSidebar();
+
+  // this function is logout function to logout user
+  const onLogout = () => {
+    localStorage.getItem("travo-token");
+    localStorage.getItem("travo-user");
+
+    router.replace("/")
+  }
 
   return (
     <SidebarMenu>
@@ -93,7 +103,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onLogout} >
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

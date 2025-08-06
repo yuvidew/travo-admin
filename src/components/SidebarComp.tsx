@@ -4,7 +4,6 @@ import * as React from "react"
 import { useEffect, useState } from "react";
 
 import { NavMain } from "./nav-main"
-import { NavSecondary } from "./nav-secondary"
 import { NavUser } from "./nav-user"
 import {
     Sidebar,
@@ -18,6 +17,7 @@ import {
 import { Box, Camera, File, HelpCircle, ListCheck, Search, Settings, Users } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { NavSecondary } from "./nav-secondary";
 
 const data = {
     user: {
@@ -148,7 +148,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
-                <NavSecondary items={data.navSecondary} className="mt-auto" />
+                <NavSecondary />
             </SidebarContent>
             <SidebarFooter>
                 {!user ? null :  <NavUser user={user} />}

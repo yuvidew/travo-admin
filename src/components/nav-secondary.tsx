@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { type LucideIcon } from 'lucide-react';
+import { HelpCircle, Search, Settings } from 'lucide-react';
 
 
 import {
@@ -11,31 +11,44 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { SettingModal } from "./setting-modal";
+import { SearchModal } from "./search-modal";
+// import { SettingModal } from "./setting-modal";
 
-export function NavSecondary({
-  items,
-  ...props
-}: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-  }[]
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+type NavSecondaryProps = React.ComponentPropsWithoutRef<typeof SidebarGroup>;
+
+export function NavSecondary (props: NavSecondaryProps) {
   return (
-    <SidebarGroup {...props}>
+    <SidebarGroup className=" mt-auto" {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
+          {/* {items.map((item) => ( */}
+          
+            <SidebarMenuItem >
+              <SidebarMenuButton>
+                <SettingModal>
+                  <Settings className=" size-4" />
+                  <span>Settings</span>
+                </SettingModal>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
+
+            <SidebarMenuItem >
+              <SidebarMenuButton >
+                  <HelpCircle />
+                  <span>Get Help</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem >
+              <SidebarMenuButton >
+                <SearchModal>
+                    <Search className=" size-4" />
+                    <span>Search</span>
+                </SearchModal>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          {/* ))} */}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
