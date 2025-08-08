@@ -12,7 +12,7 @@ import { ModeToggle } from './ModeToggle';
 export const SettingModal = ({children} : {children : ReactNode}) => {
     return (
         <Dialog>
-            <DialogTrigger className='flex items-center gap-2 w-full'>
+            <DialogTrigger className='flex items-center gap-2 w-full' asChild>
                 {children}
             </DialogTrigger>
             <DialogContent>

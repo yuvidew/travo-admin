@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { CirclePlusIcon, Mail , type LucideIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 export const NavMain = ({
   items,
@@ -23,7 +23,7 @@ export const NavMain = ({
   }[]
 }) => {
   const pathname = usePathname();
-
+  const router = useRouter();
 
   return (
     <SidebarGroup>
@@ -33,6 +33,7 @@ export const NavMain = ({
             <SidebarMenuButton
               tooltip="Create new Trip"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+              onClick={() => router.push("/create-trips")}
             >
               <CirclePlusIcon />
               <span>Create new Trip</span>
