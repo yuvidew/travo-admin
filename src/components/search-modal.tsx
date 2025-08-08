@@ -52,7 +52,7 @@ export const SearchModal = ({ children }: { children: ReactNode }) => {
             onOpenChange={setIsOpen}
         >
             <DialogTrigger 
-
+                asChild
                 className='flex items-center gap-2 w-full' 
             >
                 {children}

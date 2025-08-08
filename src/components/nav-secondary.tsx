@@ -27,8 +27,11 @@ export function NavSecondary (props: NavSecondaryProps) {
             <SidebarMenuItem >
               <SidebarMenuButton>
                 <SettingModal>
+                  <div className=" flex items-center gap-2">
+
                   <Settings className=" size-4" />
                   <span>Settings</span>
+                  </div>
                 </SettingModal>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -43,8 +46,10 @@ export function NavSecondary (props: NavSecondaryProps) {
             <SidebarMenuItem >
               <SidebarMenuButton >
                 <SearchModal>
+                  <div className=" flex items-center gap-2">
                     <Search className=" size-4" />
                     <span>Search</span>
+                  </div>
                 </SearchModal>
               </SidebarMenuButton>
             </SidebarMenuItem>
