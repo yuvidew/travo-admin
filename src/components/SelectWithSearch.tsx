@@ -22,16 +22,63 @@ import Spinner from "./Spinner";
 import Image from "next/image";
 
 interface Props {
+    /**
+     * The placeholder text displayed when no value is selected.
+     */
     placeholder: string;
+
+    /**
+     * The currently selected value.
+     */
     value: string;
+
+    /**
+     * Callback fired when the selected value changes.
+     * @param value - The new selected value.
+     */
     onChangeValue: (value: string) => void;
+
+    /**
+     * The list of selectable options.
+     * Each option must have a `label` (display text) and `value` (internal value),
+     * and can optionally have an `img` URL to display alongside.
+     */
     List: {
         label: string;
         value: string;
         img?: string;
     }[];
+
+    /**
+     * Optional loading state.
+     * When true, a spinner will be shown instead of the list.
+     */
     loading?: boolean;
 }
+
+/**
+ * A searchable dropdown select component with optional images and loading state.
+ *
+ * @param {string} placeholder - Text shown when no option is selected and in the search input.
+ * @param {string} value - The currently selected value.
+ * @param {(value: string) => void} onChangeValue - Callback fired when a new option is selected.
+ * @param {{label: string; value: string; img?: string}[]} List - Array of options to display.
+ * @param {boolean} [loading] - Optional loading state to display a spinner instead of options.
+ *
+ * @example
+ * const [selected, setSelected] = useState("");
+ * 
+ * <SelectWithSearch
+ *   placeholder="Activity"
+ *   value={selected}
+ *   onChangeValue={setSelected}
+ *   List={[
+ *     { label: "Football", value: "football", img: "/images/football.png" },
+ *     { label: "Basketball", value: "basketball" },
+ *   ]}
+ *   loading={false}
+ * />
+ */
 
 export const SelectWithSearch = ({
     placeholder,
