@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Form,
@@ -24,6 +24,8 @@ import {
 import { world_map } from "@/constants/world_map";
 
 import { budgetOptions, groupTypes, interests, travelStyles } from '@/constants';
+import { generateTripImages } from "@/lib/get-trips-image";
+import Spinner from "@/components/Spinner";
 
 const formSchema = z.object({
     country: z.string().min(3, { message: "Country is required." }),
@@ -40,6 +42,7 @@ const formSchema = z.object({
 
 export const CreateTripForm = () => {
     const { loading, allCountries } = useAllCountries();
+    const [isLoading , setIsLoading] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -69,8 +72,19 @@ export const CreateTripForm = () => {
         },
     ];
 
-    const onSubmit = (data : z.infer<typeof formSchema>) => {
-        console.log("the form data" , data);
+    const onSubmit = async (data : z.infer<typeof formSchema>) => {
+        setIsLoading(true)
+        try {
+            const response = await generateTripImages(`${data.country} ${data.interests} ${data.travel_style}`);
+
+            console.log("the response image" , response);
+
+        } catch (error) {
+            console.log("the image error" , error);
+            
+        }finally{
+            setIsLoading(false)
+        }
     }
 
     const isDisable =
@@ -233,7 +247,9 @@ export const CreateTripForm = () => {
                         {/* end to Budget Estimate */}
                     </div>
 
-                    <Button disabled={isDisable} className="w-[100px]" >Submit</Button>
+                    <Button disabled={isDisable} className="w-[100px]" >
+                        {isLoading ? <Spinner /> : "Submit"}
+                    </Button>
                 </form>
             </Form>
             <Card className="overflow-hidden flex-1 p-0 w-full h-full">
