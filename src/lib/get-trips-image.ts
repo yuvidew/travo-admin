@@ -33,6 +33,10 @@ export const generateTripImages = async (category: string, ) => {
                 }
             })
 
+        if (!result.data?.photos || result.data.photos.length === 0) {
+            throw new Error(`No images found for category: ${category}`);
+        }    
+
         return result.data.photos.map(({src} : imageType) => ({
             image : src.original
         }))
