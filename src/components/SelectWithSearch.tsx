@@ -19,6 +19,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import Spinner from "./Spinner";
+import Image from "next/image";
 
 interface Props {
     placeholder: string;
@@ -48,7 +49,7 @@ export const SelectWithSearch = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className=" justify-between"
+                    className=" justify-between text-muted-foreground"
                 >
                     {value
                         ? List.find((item) => item.value === value)?.label
@@ -63,7 +64,7 @@ export const SelectWithSearch = ({
                         className="h-9"
                     />
                     <CommandList>
-                        <CommandEmpty>No {placeholder} found.</CommandEmpty>
+                        <CommandEmpty >No {placeholder} found.</CommandEmpty>
                         <CommandGroup>
                             {loading ? (
                                 <Spinner color="default"  />
@@ -76,6 +77,15 @@ export const SelectWithSearch = ({
                                         setOpen(false);
                                     }}
                                 >
+                                    {item.img && (
+                                        <Image 
+                                            src={item.img} 
+                                            alt={item.label} 
+                                            width={50}
+                                            height={50}
+                                            className=" size-5"
+                                        />
+                                    )}
                                     {item.label}
                                     <Check
                                         className={cn(

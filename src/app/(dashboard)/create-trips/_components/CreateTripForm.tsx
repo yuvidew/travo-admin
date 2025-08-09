@@ -23,6 +23,8 @@ import {
 } from "@syncfusion/ej2-react-maps";
 import { world_map } from "@/constants/world_map";
 
+import { budgetOptions, groupTypes, interests, travelStyles } from '@/constants';
+
 const formSchema = z.object({
     country: z.string().min(3, { message: "Country is required." }),
     duration: z.coerce
@@ -50,6 +52,7 @@ export const CreateTripForm = () => {
         },
     });
 
+
     const countryData = allCountries.map((country) => ({
         label: country.name,
         value: country.name,
@@ -66,6 +69,10 @@ export const CreateTripForm = () => {
         },
     ];
 
+    const onSubmit = (data : z.infer<typeof formSchema>) => {
+        console.log("the form data" , data);
+    }
+
     const isDisable =
         !form.watch("budget_estimate") ||
         !form.watch("country") ||
@@ -75,23 +82,24 @@ export const CreateTripForm = () => {
         !form.watch("travel_style");
 
     return (
-        <div className="grid p-0 md:grid-cols-2">
+        <div className="grid p-0 md:grid-cols-2 gap-8">
 
             <Form {...form}>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
+                        form.handleSubmit(onSubmit)();
                     }}
-                    className=" flex flex-col gap-6 p-6 "
+                    className=" flex flex-col gap-6 "
                 >
-                    <div className=" flex flex-col gap-6">
+                    <div className=" grid grid-cols-2 gap-6">
                         {/* start to country */}
                         <FormField
                             control={form.control}
                             name="country"
                             render={({ field }) => (
                                 <FormItem className=" flex flex-col gap-4">
-                                    <FormLabel>Country</FormLabel>
+                                    <FormLabel className=" text-muted-foreground">Country</FormLabel>
                                     <FormControl>
                                         <SelectWithSearch
                                             placeholder="country"
@@ -129,14 +137,19 @@ export const CreateTripForm = () => {
                             control={form.control}
                             name="group_type"
                             render={({ field }) => (
-                                <FormItem className=" flex flex-col gap-4">
-                                    <FormLabel>Group type</FormLabel>
+                                <FormItem className=" flex flex-col gap-4 col-span-2">
+                                    <FormLabel className=" text-muted-foreground">Group type</FormLabel>
                                     <FormControl>
                                         <SelectWithSearch
                                             placeholder="Group type"
                                             value={field.value}
                                             onChangeValue={field.onChange}
-                                            List={[]}
+                                            List={groupTypes.map((value) => (
+                                                {
+                                                    label : value,
+                                                    value
+                                                }
+                                            ))}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -149,14 +162,19 @@ export const CreateTripForm = () => {
                             control={form.control}
                             name="travel_style"
                             render={({ field }) => (
-                                <FormItem className=" flex flex-col gap-4">
-                                    <FormLabel>Travel style</FormLabel>
+                                <FormItem className=" flex flex-col gap-4 col-span-2">
+                                    <FormLabel className=" text-muted-foreground">Travel style</FormLabel>
                                     <FormControl>
                                         <SelectWithSearch
                                             placeholder="Travel style"
                                             value={field.value}
                                             onChangeValue={field.onChange}
-                                            List={[]}
+                                            List={travelStyles.map((value) => (
+                                                {
+                                                    label : value,
+                                                    value
+                                                }
+                                            ))}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -170,13 +188,18 @@ export const CreateTripForm = () => {
                             name="interests"
                             render={({ field }) => (
                                 <FormItem className=" flex flex-col gap-4">
-                                    <FormLabel>Interests</FormLabel>
+                                    <FormLabel className=" text-muted-foreground">Interests</FormLabel>
                                     <FormControl>
                                         <SelectWithSearch
                                             placeholder="Interests"
                                             value={field.value}
                                             onChangeValue={field.onChange}
-                                            List={[]}
+                                            List={interests.map((value) => (
+                                                {
+                                                    label : value,
+                                                    value
+                                                }
+                                            ))}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -189,14 +212,19 @@ export const CreateTripForm = () => {
                             control={form.control}
                             name="budget_estimate"
                             render={({ field }) => (
-                                <FormItem className=" flex flex-col gap-4">
-                                    <FormLabel>Budget Estimate</FormLabel>
+                                <FormItem className=" flex flex-col gap-4 ">
+                                    <FormLabel className=" text-muted-foreground">Budget Estimate</FormLabel>
                                     <FormControl>
                                         <SelectWithSearch
                                             placeholder="Budget Estimate"
                                             value={field.value}
                                             onChangeValue={field.onChange}
-                                            List={[]}
+                                            List={budgetOptions.map((value) => (
+                                                {
+                                                    label : value,
+                                                    value
+                                                }
+                                            ))}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -205,12 +233,12 @@ export const CreateTripForm = () => {
                         {/* end to Budget Estimate */}
                     </div>
 
-                    <Button disabled={isDisable} >Submit</Button>
+                    <Button disabled={isDisable} className="w-[100px]" >Submit</Button>
                 </form>
             </Form>
             <Card className="overflow-hidden flex-1 p-0 w-full h-full">
-                {/* <CardContent className="grid grid-cols-1 p-0"> */}
-                    <MapsComponent className=" h-full flex-1">
+                <CardContent className=" p-0">
+                    <MapsComponent className=" h-full flex-1 ">
                         <LayersDirective >
                             <LayerDirective
                                 
@@ -226,7 +254,7 @@ export const CreateTripForm = () => {
                             />
                         </LayersDirective>
                     </MapsComponent>
-                {/* </CardContent> */}
+                </CardContent>
             </Card>
         </div>
     );

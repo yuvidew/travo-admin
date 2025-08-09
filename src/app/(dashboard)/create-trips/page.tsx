@@ -1,21 +1,24 @@
 import React from 'react'
 import { CreateTripForm } from './_components/CreateTripForm'
+import { SiteHeader } from '@/components/Header'
+import { BreadCrumbComp } from '@/components/breadcrumb-comp'
 
 const CreateTripPage = () => {
     return (
-        <main className='p-[24px] flex flex-col gap-[34px]'>
-            <div className=' flex flex-col gap-3.5'>
-                <h3 className=' text-2xl font-medium'>Create Trips with <span className=' text-primary'>AI</span></h3>
-                <p className=' text-muted-foreground'>
-                    Plan personalized itineraries instantly using AI-powered recommendations tailored to your interests, budget, and travel dates.
-                </p>
-            </div>
+        <main className='flex flex-col gap-[10px]'>
+            <SiteHeader
+                header_name='Create Trips with AI'
+            />
 
-            {/* start to form */}
-            <div className=''>
-                <CreateTripForm/>
+            <div className=' flex flex-col gap-[54px] p-6'>
+                {/* start to bread crump */}
+                <BreadCrumbComp />
+                {/* end to bread crump */}
+
+                {/* start to form */}
+                <CreateTripForm />
+                {/* end to form */}
             </div>
-            {/* end to form */}
         </main>
     )
 }

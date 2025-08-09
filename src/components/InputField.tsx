@@ -66,7 +66,7 @@ export const InputField = ({
 } : Props) => {
     return (
         <FormItem className=' flex flex-col gap-4'>
-            <FormLabel htmlFor={id}>
+            <FormLabel htmlFor={id} className=' text-muted-foreground'>
                 {label}
             </FormLabel>
             <FormControl>
