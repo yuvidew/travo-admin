@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Form,
@@ -24,8 +24,8 @@ import {
 import { world_map } from "@/constants/world_map";
 
 import { budgetOptions, groupTypes, interests, travelStyles } from '@/constants';
-import { generateTripImages } from "@/lib/get-trips-image";
 import Spinner from "@/components/Spinner";
+import { useCreateTrip } from "../hook/useTripApi";
 
 const formSchema = z.object({
     country: z.string().min(3, { message: "Country is required." }),
@@ -42,7 +42,7 @@ const formSchema = z.object({
 
 export const CreateTripForm = () => {
     const { loading, allCountries } = useAllCountries();
-    const [isLoading , setIsLoading] = useState(false);
+    const {loading : isLoading , onCreateTrip} = useCreateTrip()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -72,20 +72,7 @@ export const CreateTripForm = () => {
         },
     ];
 
-    const onSubmit = async (data : z.infer<typeof formSchema>) => {
-        setIsLoading(true)
-        try {
-            const response = await generateTripImages(`${data.country} ${data.interests} ${data.travel_style}`);
-
-            console.log("the response image" , response);
-
-        } catch (error) {
-            console.log("the image error" , error);
-            
-        }finally{
-            setIsLoading(false)
-        }
-    }
+    
 
     const isDisable =
         !form.watch("budget_estimate") ||
@@ -102,7 +89,7 @@ export const CreateTripForm = () => {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        form.handleSubmit(onSubmit)();
+                        form.handleSubmit(onCreateTrip)();
                     }}
                     className=" flex flex-col gap-6 "
                 >
