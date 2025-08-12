@@ -131,6 +131,7 @@ export const SelectWithSearch = ({
                                             width={50}
                                             height={50}
                                             className=" size-5"
+                                            loading="lazy"
                                         />
                                     )}
                                     {item.label}

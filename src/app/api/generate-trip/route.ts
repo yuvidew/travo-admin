@@ -96,7 +96,7 @@ export async function POST(request: Request) {
     if(!images){
         return NextResponse.json({
             result: "Images is not found",
-            status: 400
+            status: 401
         });
     }
 
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
         result: response.text,
-        images: images.map((src : {images : string}) => src),
+        images: images.map((src : {image : string}) => src.image),
         status: 200
     })
 }

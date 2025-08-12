@@ -10,7 +10,11 @@ export const endPoints = {
   verify_email : `${base_url}/auth/verify-email`,
   verify_forget_pass_otp : `${base_url}/auth/verify-forget-password-opt`,
   reset_password : `${base_url}/auth/reset-new-password`,
-  google_auth : `${base_url}/auth/google-login`
+  google_auth : `${base_url}/auth/google-login`,
+
+  // start to trips end points
+  create_trip : `${base_url}/trip/create-trip`,
+  get_trip : `${base_url}/trip/get-trips`,
 }
 
 export function cn(...inputs: ClassValue[]) {
