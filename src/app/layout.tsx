@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
+import { TanstackQueryProvider } from "@/components/providers/tanstack-query-provider";
+import { Suspense } from "react";
+import { LoadingFallback } from "@/components/LoadingFallback";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,13 +36,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-        >
-          <Toaster />
-          {children}
-        </ThemeProvider>
+        <Suspense fallback = {<LoadingFallback/>}>
+          <TanstackQueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+            >
+              <Toaster />
+              {children}
+            </ThemeProvider>
+          </TanstackQueryProvider>
+        </Suspense>
       </body>
     </html>
   );

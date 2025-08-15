@@ -21,7 +21,7 @@ export const SiteHeader = ({header_name, checkIsPublished , is_loading} : Props)
                 />
                 {is_loading ? (
                 <>
-                    <Skeleton className="w-3.5 h-2" />
+                    <Skeleton className="w-52 h-6" />
                     <div className="ml-auto flex items-center gap-2">
                         <Skeleton className="h-9 px-4 py-2 has-[>svg]:px-3"/>
                     </div>
