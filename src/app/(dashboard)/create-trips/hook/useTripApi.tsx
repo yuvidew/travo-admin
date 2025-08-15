@@ -1,9 +1,11 @@
 import { endPoints } from '@/lib/utils';
 import { Trip, TripResult } from '@/types/type';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { onGetTripById } from '../../trips/[id]/api-function';
 
 type DataType = {
     country: string;
@@ -193,3 +195,12 @@ export const useGetTripById = () => {
 
     return { loading, trip, onGetTripById, tripResult };
 }
+
+
+export const useGetTripByIdQuery = (id: string) => {
+    return useQuery({
+        queryKey: ["get-trips-by-id", id],
+        queryFn: () => onGetTripById(id),
+        enabled: !!id, // prevents running when id is empty
+    });
+};

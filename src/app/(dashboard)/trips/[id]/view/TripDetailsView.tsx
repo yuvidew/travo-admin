@@ -1,6 +1,6 @@
 "use client";
 import { SiteHeader } from "@/components/Header";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { TripImages, TripImagesSkeleton } from "../_components/TripImages";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InfoPills } from "../_components/InfoPills";
@@ -9,21 +9,25 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useGetTripById } from "@/app/(dashboard)/create-trips/hook/useTripApi";
+import { useGetTripByIdQuery } from "../hook/use-trip-hook";
+import { Trip, TripResult } from "@/types/type";
+import { ErrorView } from "@/components/Error-view";
+import { AxiosError } from "axios";
 
 interface Props {
     id: string;
+    token : string;
 }
 
 /**
  * Displays details of a trip fetched by its ID.
  */
-export const TripDetailsView = ({ id }: Props) => {
-    const { loading, trip, onGetTripById, tripResult } = useGetTripById();
+export const TripDetailsView = ({ id  , token}: Props) => {
+    const { data, isLoading, isError, error } = useGetTripByIdQuery(id , token);
 
-    useEffect(() => {
-        if (id) onGetTripById(id);
-    }, [id]);
+    const trip: Trip = data?.trip;
+    const tripResult: TripResult = data?.tripResult;
+
 
     const pillsItems = useMemo(
         () =>
@@ -71,16 +75,35 @@ export const TripDetailsView = ({ id }: Props) => {
         return Array.isArray(trip.images) ? trip.images : trip.images.split(",");
     }, [trip?.images]);
 
-    if (loading) {
+    if (isLoading) {
         return (
-            <main className="flex flex-col gap-[10px]">
+            <main className="flex flex-col  gap-[10px]">
                 <SiteHeader header_name="Loading..." is_loading />
-                <section className="w-full max-w-sm md:max-w-3xl flex flex-col gap-5.5">
-                    <Skeleton className="w-full h-4" />
-                    <TripImagesSkeleton />
-                    <Skeleton className="w-full h-96" />
-                </section>
+                <div className=" flex flex-col items-center">
+                    <section className="w-full max-w-sm md:max-w-3xl flex flex-col gap-5.5">
+                        <Skeleton className="w-full h-4" />
+                        <TripImagesSkeleton />
+                        <Skeleton className="w-full h-96" />
+                    </section>
+                </div>
             </main>
+        );
+    }
+
+    if (isError) {
+        let description = "An unexpected error occurred while fetching the trip.";
+
+        if (error instanceof AxiosError) {
+            description = error.response?.data?.message || description;
+        } else if (error instanceof Error) {
+            description = error.message;
+        }
+
+        return (
+            <ErrorView
+                heading="Fetch trip"
+                description={description}
+            />
         );
     }
 
@@ -89,7 +112,7 @@ export const TripDetailsView = ({ id }: Props) => {
             {/* start to header */}
             <SiteHeader
                 header_name={tripResult?.name ?? ""}
-                is_loading={loading}
+                is_loading={isLoading}
                 checkIsPublished={trip?.is_published}
             />
             {/* end to header */}
