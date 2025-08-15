@@ -25,6 +25,17 @@ import {
 import { Bell, CreditCard, EllipsisVertical, LogOutIcon, UserCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 
+/**
+ * Navigation user menu component.
+ *
+ * @param {{ user: { name: string; email: string; picture: string } }} props
+ * - `user.name` - The display name of the user.
+ * - `user.email` - The email address of the user.
+ * - `user.picture` - The profile picture URL of the user.
+ *
+ * Displays a dropdown menu with user information, account actions, and logout option.
+ */
+
 export function NavUser({
   user,
 }: {
@@ -39,10 +50,10 @@ export function NavUser({
 
   // this function is logout function to logout user
   const onLogout = () => {
-    localStorage.getItem("travo-token");
-    localStorage.getItem("travo-user");
+    localStorage.removeItem("travo-token");
+    localStorage.removeItem("travo-user");
 
-    router.replace("/")
+    router.replace("/sign-in");
   }
 
   return (
@@ -77,7 +88,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.picture} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg uppercase">{user.name.slice(0,2)}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>

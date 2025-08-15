@@ -1,3 +1,5 @@
+import { SideBarProvider } from "@/components/providers/SideBarProvider";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -5,7 +7,10 @@ export default function RootLayout({
 }>) {
     return (
         <div>
-            {children}
+            <SideBarProvider>
+
+                {children}
+            </SideBarProvider>
         </div>
     )
 }

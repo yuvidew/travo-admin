@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Globe } from "lucide-react"
+import { Skeleton } from "./ui/skeleton"
 
 interface Props {
-    header_name : string
+    header_name : string,
+    is_loading? : boolean,
+    checkIsPublished? : string
 }
 
-export const SiteHeader = ({header_name} : Props) => {
+export const SiteHeader = ({header_name, checkIsPublished , is_loading} : Props) => {
     return (
         <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
             <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -15,19 +19,24 @@ export const SiteHeader = ({header_name} : Props) => {
                     orientation="vertical"
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
-                <h1 className="text-base font-medium">{header_name}</h1>
-                <div className="ml-auto flex items-center gap-2">
-                    <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-                        <a
-                            href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            className="dark:text-foreground"
-                        >
-                            GitHub
-                        </a>
-                    </Button>
-                </div>
+                {is_loading ? (
+                <>
+                    <Skeleton className="w-3.5 h-2" />
+                    <div className="ml-auto flex items-center gap-2">
+                        <Skeleton className="h-9 px-4 py-2 has-[>svg]:px-3"/>
+                    </div>
+                </>
+                ) : (
+                <>
+                    <h1 className="text-base font-medium">{header_name}</h1>
+                    <div className="ml-auto flex items-center gap-2">
+                        <Button variant='default' size="sm">
+                            <Globe />
+                            {checkIsPublished === "1" ? "Published" : "Publish"}
+                        </Button>
+                    </div>
+                </>
+                )}
             </div>
         </header>
     )

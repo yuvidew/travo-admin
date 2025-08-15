@@ -51,7 +51,12 @@ export const NavMain = ({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem  key={item.title}>
-              <SidebarMenuButton isActive = {pathname === item.url} tooltip={item.title}>
+              <SidebarMenuButton 
+                isActive = {pathname === item.url} 
+                tooltip={item.title}
+                onClick={() => router.push(item.url)}
+              >
+
                 {item.icon && <item.icon/>}
                 <span>{item.title}</span>
               </SidebarMenuButton>

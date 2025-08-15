@@ -15,6 +15,7 @@ export const endPoints = {
   // start to trips end points
   create_trip : `${base_url}/trip/create-trip`,
   get_trip : `${base_url}/trip/get-trips`,
+  get_trip_by_id : `${base_url}/trip/get-trip-by-id`,
 }
 
 export function cn(...inputs: ClassValue[]) {

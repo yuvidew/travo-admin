@@ -135,7 +135,7 @@ export const OtpForm = () => {
 
                 <div className=' flex items-center justify-end'>
                     <Link href={"/sign-in"} className=' text-primary hover:underline text-sm'>
-                            sign-in
+                        sign-in
                     </Link>
                 </div>
             </div>
