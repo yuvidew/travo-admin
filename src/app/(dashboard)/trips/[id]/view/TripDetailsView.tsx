@@ -107,10 +107,9 @@ export const TripDetailsView = ({ id }: Props) => {
                             />
                             <InfoPills
                                 text={
-                                    tripResult?.itinerary
-                                        ?.slice(0, 2)
+                                    ((tripResult?.itinerary?.slice(0, 2) ?? [])
                                         .map((day) => day.location)
-                                        .join(", ") || "Unknown Location"
+                                        .join(", ")) || "Unknown Location"
                                 }
                                 Icon={MapPin}
                             />
