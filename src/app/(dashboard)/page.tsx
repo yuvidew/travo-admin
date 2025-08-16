@@ -1,14 +1,14 @@
-"use client"
+// "use client"
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+// import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
-export default function Home() {
-  useAuthRedirect()
+export default  function Home() {
+  // useAuthRedirect()
 
   return (
     <main>
       <SidebarTrigger/>
-    {/* <SettingModal/> */}
+      {/* <SettingModal/> */}
     </main>
   );
 }

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { onGetTripById } from '../../trips/[id]/api-function';
+import { onGetTripById } from '../../trips/api-function';
 
 type DataType = {
     country: string;

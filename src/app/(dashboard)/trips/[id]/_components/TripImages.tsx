@@ -42,7 +42,7 @@ export const TripImages = ({ images }: Props) => {
                 <Image
                     src={safeImages[0]}
                     alt={`Trip image 0`}
-                    className='row-span-2 col-span-2 w-full rounded-md object-cover'
+                    className='row-span-2 col-span-2 w-full h-[350px] rounded-md object-cover'
                     width={500}
                     height={500}
                 />
@@ -51,7 +51,7 @@ export const TripImages = ({ images }: Props) => {
                 <Image
                     src={safeImages[1]}
                     alt={`Trip image 1`}
-                    className='w-full h-40 rounded-md object-cover'
+                    className='w-full h-full rounded-md object-cover'
                     width={500}
                     height={500}
                 />
@@ -60,7 +60,7 @@ export const TripImages = ({ images }: Props) => {
                 <ImageDialogCarousel
                     images={safeImages}
                 >
-                    <div className=' w-full h-40 rounded-md relative cursor-pointer'>
+                    <div className=' w-full h-full rounded-md relative cursor-pointer'>
                         <div className=' absolute z-10 top-0 left-0 h-full w-full bg-black/70 flex items-center justify-center'>
                             <p className=' text-4xl font-bold text-white'>{image_length}+</p>
                         </div>
