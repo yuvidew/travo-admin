@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { useEffect, useState } from "react";
 
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
@@ -18,6 +17,7 @@ import { Box, Camera, File, HelpCircle, ListCheck, Search, Settings, Users } fro
 import Link from "next/link"
 import Image from "next/image"
 import { NavSecondary } from "./nav-secondary";
+import { User } from "@/types/type"
 
 const data = {
     user: {
@@ -109,19 +109,13 @@ const data = {
     ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const [user, setUser] = useState<{ name: string; email: string; picture: string } | null>(null);
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem("travo-user");
-        if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (e) {
-                console.error("Invalid user in localStorage:", e);
-            }
-        }
-    }, [])
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+    user?: User | null
+}
+
+export const AppSidebar = ({ user, ...props }: AppSidebarProps) => {
+
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>

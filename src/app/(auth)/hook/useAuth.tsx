@@ -4,6 +4,7 @@ import axios from "axios"
 import { endPoints } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { setCookie } from "nookies";
 
 /**
  * Custom hook to handle sending OTP to the server.
@@ -30,8 +31,23 @@ export const useSendOtp = () => {
             if (status === 200) {
                 toast.success(data.message);
 
-                localStorage.setItem("travo-token", data.token);
-                localStorage.setItem("travo-user", JSON.stringify(data.user));
+                // localStorage.setItem("travo-token", data.token);
+                // localStorage.setItem("travo-user", JSON.stringify(data.user));
+
+                setCookie(null, "travo-token", data.token, {
+                    maxAge: 30 * 24 * 60 * 60,
+                    path: "/",
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "lax", // 👈 safer
+                });
+
+                setCookie(null, "travo-user", JSON.stringify(data.user), {
+                    maxAge: 30 * 24 * 60 * 60,
+                    path: "/",
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "lax", // 👈 safer
+                });
+
 
                 localStorage.removeItem("travo-user-email");
 
@@ -47,7 +63,7 @@ export const useSendOtp = () => {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
                     return false;
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                     return false;
                 }
@@ -99,7 +115,7 @@ export const useSignUp = () => {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                 }
             } else {
@@ -152,7 +168,7 @@ export const useSignIn = () => {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                 }
             } else {
@@ -206,7 +222,7 @@ export const useVerifyEmail = () => {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
                     return false;
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                     return false;
                 }
@@ -263,7 +279,7 @@ export const useVerifyPassResetCode = () => {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
                     return false;
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                     return false;
                 }
@@ -321,7 +337,7 @@ export const useResetPassword = () => {
                 if (error.response?.status === 401) {
                     toast.error("Invalid email and password.");
                     return false;
-                } else if(error.response?.status === 400){
+                } else if (error.response?.status === 400) {
                     toast.error(error.response.data.message);
                     return false;
                 }

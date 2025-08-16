@@ -4,7 +4,7 @@ import React from 'react'
 import { TripDetailsView } from './view/TripDetailsView';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/get-query-client';
-import { onGetTripById } from './api-function';
+import { onGetTripById } from '../api-function';
 import { cookies } from 'next/headers';
 
 const TripDetailsPage = async({ params }: { params: { id: string } }) => {

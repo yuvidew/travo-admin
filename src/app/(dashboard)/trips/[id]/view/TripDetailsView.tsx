@@ -9,10 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useGetTripByIdQuery } from "../hook/use-trip-hook";
 import { Trip, TripResult } from "@/types/type";
 import { ErrorView } from "@/components/Error-view";
 import { AxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { onGetTripById } from "../../api-function";
 
 interface Props {
     id: string;
@@ -20,10 +21,22 @@ interface Props {
 }
 
 /**
- * Displays details of a trip fetched by its ID.
+ * TripDetailsView component
+ *
+ * Displays detailed information about a trip including images,
+ * itinerary, travel style, budget, weather, and more.
+ *
+ * @param {Object} props - The component props
+ * @param {string} props.id - Trip ID used to fetch trip details
+ * @param {string} props.token - Auth token (from cookies) used for API requests
  */
+
 export const TripDetailsView = ({ id  , token}: Props) => {
-    const { data, isLoading, isError, error } = useGetTripByIdQuery(id , token);
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["get-trips-by-id", id],
+        queryFn: () => onGetTripById(id , token),
+        enabled: !!id && !!token, 
+    });
 
     const trip: Trip = data?.trip;
     const tripResult: TripResult = data?.tripResult;

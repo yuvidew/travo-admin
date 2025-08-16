@@ -79,3 +79,10 @@ export type Trip = {
     userId: string;
     is_published : string
 };
+
+
+export type User =  {
+    name: string
+    email: string
+    picture: string
+}

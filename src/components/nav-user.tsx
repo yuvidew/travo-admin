@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Bell, CreditCard, EllipsisVertical, LogOutIcon, UserCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { destroyCookie } from "nookies"
 
 /**
  * Navigation user menu component.
@@ -50,8 +51,9 @@ export function NavUser({
 
   // this function is logout function to logout user
   const onLogout = () => {
-    localStorage.removeItem("travo-token");
-    localStorage.removeItem("travo-user");
+
+    destroyCookie(null, "travo-token");
+    destroyCookie(null, "travo-user");
 
     router.replace("/sign-in");
   }
