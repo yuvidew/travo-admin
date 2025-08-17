@@ -38,13 +38,13 @@ type TripActivity = {
     description: string;
 };
 
-type TripItineraryDay = {
+export type TripItineraryDay = {
     day: number;
     location: string;
     activities: TripActivity[];
 };
 
-type TripLocation = {
+export type TripLocation = {
     city: string;
     coordinates: [number, number];
     openStreetMap: string;
@@ -77,7 +77,7 @@ export type Trip = {
     result: string; // JSON string of TripResult
     created_at: string; // ISO date string
     userId: string;
-    is_published : string
+    is_published : number
 };
 
 

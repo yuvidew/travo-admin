@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 interface Props {
     header_name : string,
     is_loading? : boolean,
-    checkIsPublished? : string
+    checkIsPublished? : number
     is_Show_Publish? : boolean
 }
 
@@ -34,7 +34,7 @@ export const SiteHeader = ({header_name, checkIsPublished , is_loading , is_Show
                     <div className={cn("ml-auto items-center gap-2" , is_Show_Publish ? "flex" : "hidden")}>
                         <Button variant='default' size="sm">
                             <Globe />
-                            {checkIsPublished === "1" ? "Published" : "Publish"}
+                            {checkIsPublished === 1 ? "Published" : "Publish"}
                         </Button>
                     </div>
                 </>
