@@ -2,6 +2,7 @@
 import { endPoints } from "@/lib/utils";
 import axios from "axios";
 import { toast } from "sonner";
+import { Trip, TripResult } from '../../../../types/type';
 
 /**
  * Fetch a trip by its ID.
@@ -63,7 +64,8 @@ export const onGetTrips = async (user_id: string, token?: string) => {
         const { data, status } = await axios.get(`${endPoints.get_trip}/${user_id}`, { headers });
         if (status === 200) {
             return {
-                trips : data.trips,
+                trips: data.trips as Trip[],
+                trips_result : data.trips.result as TripResult[]
             }
         }
     } catch (error) {
@@ -81,6 +83,6 @@ export const onGetTrips = async (user_id: string, token?: string) => {
             }
         }
 
-        return { tripResult: {}, trip: null };
+        return {  trip: [] , trips_result : [] };
     }
 }

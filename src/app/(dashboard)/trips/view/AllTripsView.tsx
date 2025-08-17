@@ -7,6 +7,8 @@ import { onGetTrips } from '../api-function'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ErrorView } from '@/components/Error-view';
 import { AxiosError } from 'axios';
+import { TripCard } from '../_components/TripCard';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     user_id: string,
@@ -35,6 +37,7 @@ export const AllTripsView = ({ user_id, token }: Props) => {
         queryFn: () => onGetTrips(user_id, token),
         enabled: !!user_id && !!token,
     });
+    const router = useRouter();
 
     if (isLoading) {
         return (
@@ -78,6 +81,7 @@ export const AllTripsView = ({ user_id, token }: Props) => {
         );
     }
 
+
     return (
         <section className=' flex flex-col gap-4'>
             {/* start to search box */}
@@ -88,7 +92,25 @@ export const AllTripsView = ({ user_id, token }: Props) => {
             />
             {/* end to search box */}
 
-            
+            {/* start to list a trips data */}
+            <div className=' grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4'>
+                {data?.trips?.map(({ images, result, is_published , id}, i) => {
+                    const trip_details = JSON.parse(result);
+
+                    return (
+                        <TripCard
+                            key={i}
+                            title={trip_details.name}
+                            img={images.split(",")[0]}
+                            duration={trip_details.duration}
+                            itinerary={trip_details.itinerary}
+                            is_publish={is_published === 0 ? true : false}
+                            onViewMore = {() => router.push(`/trips/${id}`)}
+                        />
+                    )
+                })}
+            </div>
+            {/* end to list a trips data */}
         </section>
     )
 }
