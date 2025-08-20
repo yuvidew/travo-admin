@@ -50,6 +50,7 @@ export const TripCard = ({img , is_publish , title , duration , itinerary , onVi
                     width={500}
                     height={500}
                     className=' h-full w-full object-cover'
+                    
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
                 <div className=' absolute top-0 left-0 h-full flex justify-between flex-col p-6 '>

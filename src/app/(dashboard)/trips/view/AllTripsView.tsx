@@ -1,18 +1,19 @@
 "use client";
 
-import { SearchInput } from '@/components/search-input'
-import { useQuery } from '@tanstack/react-query'
-import React from 'react'
-import { onGetTrips } from '../api-function'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ErrorView } from '@/components/Error-view';
-import { AxiosError } from 'axios';
-import { TripCard } from '../_components/TripCard';
-import { useRouter } from 'next/navigation';
+import { SearchInput } from "@/components/search-input";
+import { useQuery } from "@tanstack/react-query";
+import React, { useMemo } from "react";
+import { onGetTrips } from "../api-function";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorView } from "@/components/Error-view";
+import { AxiosError } from "axios";
+import { TripCard } from "../_components/TripCard";
+import { useRouter } from "next/navigation";
+import { useLocalStorage } from "usehooks-ts";
 
 interface Props {
-    user_id: string,
-    token: string,
+    user_id: string;
+    token: string;
 }
 
 /**
@@ -38,30 +39,39 @@ export const AllTripsView = ({ user_id, token }: Props) => {
         enabled: !!user_id && !!token,
     });
     const router = useRouter();
+    const [searchValue] = useLocalStorage<string>("trip-search", "");
+
+    const searchedList = useMemo(() => {
+        return data?.trips?.filter(({ result }) => {
+            const trip_details = JSON.parse(result);
+            return trip_details.name
+                .toLowerCase()
+                .includes(searchValue.toLowerCase());
+        });
+    }, [searchValue, data?.trips]);
 
     if (isLoading) {
         return (
-            <section className=' flex flex-col gap-4'>
+            <section className=" flex flex-col gap-4">
                 {/* start to search box */}
                 <SearchInput
-                    search_type='trip-search'
-                    storageKey='trip-search'
-                    placeholder='Search trip...'
+                    search_type="trip-search"
+                    storageKey="trip-search"
+                    placeholder="Search trip..."
                 />
                 {/* end to search box */}
 
                 {/* start to all trips */}
-                <div className=' grid grid-cols-4 gap-3'>
-                    {Array(5).fill(null).map((_, i) => (
-                        <Skeleton
-                            key={i}
-                            className=' h-80'
-                        />
-                    ))}
+                <div className=" grid grid-cols-4 gap-3">
+                    {Array(5)
+                        .fill(null)
+                        .map((_, i) => (
+                            <Skeleton key={i} className=" h-80" />
+                        ))}
                 </div>
                 {/* end to all trips */}
             </section>
-        )
+        );
     }
 
     if (isError) {
@@ -73,28 +83,22 @@ export const AllTripsView = ({ user_id, token }: Props) => {
             description = error.message;
         }
 
-        return (
-            <ErrorView
-                heading="Fetch trip"
-                description={description}
-            />
-        );
+        return <ErrorView heading="Fetch trip" description={description} />;
     }
 
-
     return (
-        <section className=' flex flex-col gap-4'>
+        <section className=" flex flex-col gap-4">
             {/* start to search box */}
             <SearchInput
-                search_type='trip-search'
-                storageKey='trip-search'
-                placeholder='Search trip...'
+                search_type="trip-search"
+                storageKey="trip-search"
+                placeholder="Search trip..."
             />
             {/* end to search box */}
 
             {/* start to list a trips data */}
-            <div className=' grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4'>
-                {data?.trips?.map(({ images, result, is_published , id}, i) => {
+            <div className=" grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+                {searchedList?.map(({ images, result, is_published, id }, i) => {
                     const trip_details = JSON.parse(result);
 
                     return (
@@ -105,12 +109,12 @@ export const AllTripsView = ({ user_id, token }: Props) => {
                             duration={trip_details.duration}
                             itinerary={trip_details.itinerary}
                             is_publish={is_published === 0 ? true : false}
-                            onViewMore = {() => router.push(`/trips/${id}`)}
+                            onViewMore={() => router.push(`/trips/${id}`)}
                         />
-                    )
+                    );
                 })}
             </div>
             {/* end to list a trips data */}
         </section>
-    )
-}
+    );
+};
