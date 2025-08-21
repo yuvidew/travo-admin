@@ -221,8 +221,8 @@ export const AllUserView = () => {
     }, [currentPage, filteredByStatus, itemsPerPage]);
 
     const totalPages = useMemo(() => {
-        return Math.ceil(payments.length / itemsPerPage);
-    }, [payments.length, itemsPerPage]);
+        return Math.ceil(filteredByStatus.length / itemsPerPage);
+    }, [filteredByStatus.length, itemsPerPage]);
 
     const columns: ColumnDef<Payment>[] = [
         {
