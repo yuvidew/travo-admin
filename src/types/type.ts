@@ -86,3 +86,12 @@ export type User =  {
     email: string
     picture: string
 }
+
+export type Payment = {
+    id: number
+    amount: number,
+    user_name: string,
+    status: "pending" | "processing" | "success" | "failed"
+    email: string,
+    booked_trips : number
+}

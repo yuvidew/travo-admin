@@ -4,7 +4,7 @@ import Spinner from "@/components/Spinner";
 export const LoadingFallback = () => {
     return (
         <div className=" h-screen w-full flex items-center justify-center">
-            <Spinner/>
+            <Spinner size="lg" />
         </div>
     )
 }
