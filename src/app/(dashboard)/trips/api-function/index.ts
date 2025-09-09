@@ -1,8 +1,23 @@
 
+"use server"
+
 import { endPoints } from "@/lib/utils";
 import axios from "axios";
 import { toast } from "sonner";
 import { Trip, TripResult } from '../../../../types/type';
+import { cookies } from "next/headers";
+
+const api = axios.create();
+
+api.interceptors.request.use(async (config) => {
+    const cookieStore = await cookies(); 
+    const token = await cookieStore.get("travo-token")?.value;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+        config.headers["Content-Type"] = "application/json";
+    }
+    return config;
+});
 
 /**
  * Fetch a trip by its ID.
@@ -14,12 +29,10 @@ import { Trip, TripResult } from '../../../../types/type';
  *   or empty result with null trip if the request fails.
  */
 
-export const onGetTripById = async (id: string, token?: string) => {
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    if (token) headers.Authorization = `Bearer ${token}`;
+export const onGetTripById = async (id: string) => {
 
     try {
-        const { data, status } = await axios.get(`${endPoints.get_trip_by_id}/${id}`, { headers });
+        const { data, status } = await api.get(`${endPoints.get_trip_by_id}/${id}`);
         if (status === 200) {
             let cleaned = data.trip.result?.trim();
             if (cleaned?.startsWith("```json")) {
@@ -55,13 +68,10 @@ export const onGetTripById = async (id: string, token?: string) => {
  *   or default values if the request fails.
  */
 
-export const onGetTrips = async (user_id: string, token?: string) => {
-    console.log("🔍 Calling onGetTrips with:", user_id);
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    if (token) headers.Authorization = `Bearer ${token}`;
+export const onGetTrips = async (user_id: string, ) => {
 
     try {
-        const { data, status } = await axios.get(`${endPoints.get_trip}/${user_id}`, { headers });
+        const { data, status } = await api.get(`${endPoints.get_trip}/${user_id}`);
         if (status === 200) {
             return {
                 trips: data.trips as Trip[],
@@ -84,5 +94,32 @@ export const onGetTrips = async (user_id: string, token?: string) => {
         }
 
         return {  trip: [] , trips_result : [] };
+    }
+}
+
+export const onToggleTripPublish = async(id : number) => {
+    try {
+        const {data , status} = await api.put(`${endPoints.update_trip_publish_by_id}/${String(id)}`);
+
+        if(status === 200){
+            return data
+        }
+        
+    } catch (error) {
+        console.error("Error update trip publish by ID", error);
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 404) {
+                toast.error(error.response?.data.message);
+            } else if (error.response?.status === 409) {
+                toast.error(error.response?.data.message);
+            }
+            else if (error.response?.status === 500) {
+                toast.error(error.response?.data.message);
+            }else {
+                toast.error("Something went wrong while fetching trips.");
+            }
+        }
+
+        throw error;
     }
 }

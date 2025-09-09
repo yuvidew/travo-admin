@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { onGetTripById } from '../../trips/api-function';
+import Cookies from "js-cookie";
+
 
 type DataType = {
     country: string;
@@ -19,7 +21,8 @@ type DataType = {
 const api = axios.create();
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("travo-token");
+
+    const token = Cookies.get("travo-token");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
         config.headers["Content-Type"] = "application/json";
@@ -55,7 +58,7 @@ export const useCreateTrip = () => {
     const onCreateTrip = async (Formdata: DataType) => {
         setLoading(true)
         try {
-            const userId = JSON.parse(localStorage.getItem("travo-user") as string)
+            const userId = JSON.parse(Cookies.get("travo-user") as string)
             const ai_response = await axios.post("/api/generate-trip", Formdata);
 
             console.log("ai generated result" , ai_response.data.result ,  typeof ai_response.data.result);
@@ -87,13 +90,12 @@ export const useCreateTrip = () => {
                     toast.error(error.response?.data.message);
                 } else if (error.response?.status === 401) {
                     toast.error(error.response?.data.message);
+                }else if (error.response?.status === 500) {
+                    toast.error(error.response?.data.message);
+                } else {
+                    toast.error(error.response?.data.message);
                 }
-            } else {
-                toast.error("An unexpected error occurred.", {
-                    duration: 4000,
-                    position: "top-center",
-                });
-            }
+            } 
         } finally {
             setLoading(false)
         }

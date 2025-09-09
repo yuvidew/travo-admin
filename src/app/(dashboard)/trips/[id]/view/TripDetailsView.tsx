@@ -18,7 +18,6 @@ import { BreadCrumbComp } from "@/components/breadcrumb-comp";
 
 interface Props {
     id: string;
-    token : string;
 }
 
 /**
@@ -32,11 +31,11 @@ interface Props {
  * @param {string} props.token - Auth token (from cookies) used for API requests
  */
 
-export const TripDetailsView = ({ id  , token}: Props) => {
+export const TripDetailsView = ({ id}: Props) => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["get-trips-by-id", id],
-        queryFn: () => onGetTripById(id , token),
-        enabled: !!id && !!token, 
+        queryFn: () => onGetTripById(id),
+        enabled: !!id, 
     });
 
     const trip: Trip = data?.trip;
@@ -128,6 +127,7 @@ export const TripDetailsView = ({ id  , token}: Props) => {
                 header_name={tripResult?.name ?? ""}
                 is_loading={isLoading}
                 checkIsPublished={trip?.is_published}
+                trip_id = {Number(id)}
             />
 
             {/* end to header */}
