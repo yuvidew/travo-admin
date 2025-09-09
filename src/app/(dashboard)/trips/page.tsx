@@ -10,14 +10,13 @@ import { AllTripsView } from './view/AllTripsView';
 const TripPage = async () => {
     const queryClient = getQueryClient();
     const cookieStore = await cookies(); 
-    const token = cookieStore.get("travo-token")?.value;
     const user = cookieStore.get("travo-user")?.value;
 
     const user_id = JSON.parse(user as string).id
 
     await queryClient.prefetchQuery({
         queryKey : ["get-trips"],
-        queryFn : () => onGetTrips(user_id , token),
+        queryFn : () => onGetTrips(user_id ),
         
     })
 
@@ -37,7 +36,6 @@ const TripPage = async () => {
                     {/* start to all trips view */}
                     <AllTripsView
                         user_id={user_id}
-                        token={token as string}
                     />
                     {/* end to all trips view */}
                 </div>

@@ -266,6 +266,7 @@ export const useVerifyPassResetCode = () => {
 
             if (status === 200) {
                 toast.success(data.message);
+                localStorage.setItem("travo-reset-password-token-verify" , data.token)
                 return data.success;
             } else if (status === 409) {
                 toast.error(data.message);
@@ -318,12 +319,19 @@ export const useResetPassword = () => {
     const onResetPassword = async (form: { email: string, newPassword: string }) => {
         setLoading(true);
 
+        const reset_pass_token = localStorage.getItem("travo-reset-password-token-verify")
+
         try {
-            const { data, status } = await axios.put(endPoints.reset_password, form);
+            const { data, status } = await axios.put(endPoints.reset_password, form , {
+                headers : {
+                    Authorization : `Bearer ${reset_pass_token}`
+                }
+            });
 
             if (status === 200) {
                 toast.success(data.message);
                 localStorage.removeItem("travo-user-email");
+                localStorage.removeItem("travo-reset-password-token-verify");
                 return data.success;
             } else if (status === 409) {
                 toast.error(data.message);

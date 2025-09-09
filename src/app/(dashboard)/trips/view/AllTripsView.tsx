@@ -13,7 +13,6 @@ import { useLocalStorage } from "usehooks-ts";
 
 interface Props {
     user_id: string;
-    token: string;
 }
 
 /**
@@ -32,11 +31,11 @@ interface Props {
  * ```
  */
 
-export const AllTripsView = ({ user_id, token }: Props) => {
+export const AllTripsView = ({ user_id }: Props) => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["get-trips"],
-        queryFn: () => onGetTrips(user_id, token),
-        enabled: !!user_id && !!token,
+        queryFn: () => onGetTrips(user_id),
+        enabled: !!user_id,
     });
     const router = useRouter();
     const [searchValue] = useLocalStorage<string>("trip-search", "");

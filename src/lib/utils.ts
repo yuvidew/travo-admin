@@ -1,7 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-const base_url = "http://localhost:2000/v1"
+// const base_url = "http://localhost:2000/v1"
+const base_url = "http://192.168.1.4:2000/v1"
+
 
 export const endPoints = {
   signup : `${base_url}/auth/sign-up`,
@@ -16,6 +18,7 @@ export const endPoints = {
   create_trip : `${base_url}/trip/create-trip`,
   get_trip : `${base_url}/trip/get-trips`,
   get_trip_by_id : `${base_url}/trip/get-trip-by-id`,
+  update_trip_publish_by_id : `${base_url}/trip/update-trip-publish`
 }
 
 export function cn(...inputs: ClassValue[]) {

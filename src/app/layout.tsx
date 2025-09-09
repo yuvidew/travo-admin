@@ -42,7 +42,7 @@ export default function RootLayout({
               attribute="class"
               defaultTheme="system"
             >
-              <Toaster />
+              <Toaster position="bottom-right" /> 
               {children}
             </ThemeProvider>
           </TanstackQueryProvider>
