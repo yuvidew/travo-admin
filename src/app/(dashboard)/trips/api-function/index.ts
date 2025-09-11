@@ -97,6 +97,12 @@ export const onGetTrips = async (user_id: string, ) => {
     }
 }
 
+/**
+ * Toggle the publish status for a trip by ID.
+ *
+ * @param {number} id - The unique identifier of the trip to toggle.
+ * @returns {Promise<any>} The API response data when successful.
+ */
 export const onToggleTripPublish = async(id : number) => {
     try {
         const {data , status} = await api.put(`${endPoints.update_trip_publish_by_id}/${String(id)}`);
