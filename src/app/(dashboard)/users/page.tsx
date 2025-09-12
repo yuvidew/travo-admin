@@ -2,8 +2,17 @@ import { BreadCrumbComp } from '@/components/breadcrumb-comp'
 import { SiteHeader } from '@/components/Header'
 import React from 'react'
 import { AllUserView } from './view/AllUserView'
+import { getQueryClient } from '@/lib/get-query-client'
+import { onGetBookedTrips } from './api-function'
 
-const page = () => {
+const BookedUserPage = async () => {
+    const queryClient = getQueryClient();
+
+    await queryClient.prefetchQuery({
+        queryKey : ["get-booked-trips"],
+        queryFn : () => onGetBookedTrips()
+    });
+
     return (
         <main className='flex flex-col gap-[10px]'>
             {/* start to header */}
@@ -28,4 +37,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default BookedUserPage;

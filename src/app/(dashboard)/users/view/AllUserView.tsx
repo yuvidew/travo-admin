@@ -20,6 +20,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useLocalStorage } from 'usehooks-ts';
+import { useUserBookedTrips } from '../hook/useBookedTripUsers';
 
 const select_status = [
     "Pending", "Processing", "Success", "Failed"
@@ -190,6 +191,10 @@ const payments: Payment[] = [
 
 
 export const AllUserView = () => {
+    const {data , isPending, isError} =  useUserBookedTrips();
+
+    console.log('the data is : ', data);
+
     const [filter, setFilter] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
     const [searchValue] = useLocalStorage("user-search", "")

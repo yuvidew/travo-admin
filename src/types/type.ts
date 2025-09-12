@@ -74,14 +74,14 @@ export type Trip = {
     interest: string;
     budget_estimate: string;
     images: string; // comma-separated URLs
-    result: string; // JSON string of TripResult
+    result: TripResult; // JSON string of TripResult
     created_at: string; // ISO date string
     userId: string;
-    is_published : number
+    is_published: number
 };
 
 
-export type User =  {
+export type User = {
     name: string
     email: string
     picture: string
@@ -93,5 +93,29 @@ export type Payment = {
     user_name: string,
     status: "pending" | "processing" | "success" | "failed"
     email: string,
-    booked_trips : number
+    booked_trips: number
 }
+
+export type TripWithBooking = {
+    id: number;
+    admin_id: number;
+    country: string;
+    group_type: string;
+    travel_style: string;
+    interest: string;
+    budget_estimate: string;
+    created_at: string;   // ISO date string
+    is_published: number; // 0 | 1
+    result : TripResult;
+    images : string[]; 
+    booking : {
+        user_name: string;
+        email: string;
+        price: string;
+        start_date: string;   // ISO date string
+        end_date: string;     // ISO date string
+        status: "pending" | "confirmed" | "cancelled";
+        booking_date: string; // ISO date string
+        destination: string;
+    }
+};

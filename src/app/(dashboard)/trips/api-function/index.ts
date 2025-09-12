@@ -34,11 +34,7 @@ export const onGetTripById = async (id: string) => {
     try {
         const { data, status } = await api.get(`${endPoints.get_trip_by_id}/${id}`);
         if (status === 200) {
-            let cleaned = data.trip.result?.trim();
-            if (cleaned?.startsWith("```json")) {
-                cleaned = cleaned.replace(/^```json\s*/, "").replace(/```$/, "").trim();
-            }
-            return { tripResult: JSON.parse(cleaned || "{}"), trip: data.trip };
+            return { tripResult: data.trip.result, trip: data.trip };
         }
     } catch (error) {
         console.error("Error fetching trip by ID", error);
