@@ -16,7 +16,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { StatusPills } from "./status_pills"
-import { Payment } from "@/types/type"
+import { TripList } from "@/types/type"
 
 
 
@@ -25,6 +25,10 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
+/**
+ * @param columns Column definitions for rendering the table.
+ * @param data Row data consumed by the table instance.
+ */
 export const DataTable = <TData, TValue>({
     columns,
     data,
@@ -67,7 +71,7 @@ export const DataTable = <TData, TValue>({
                                     <TableCell key={cell.id}>
                                         {
                                             cell.column.id === "status"
-                                            ? <StatusPills status={(row.original as Payment).status} />
+                                            ? <StatusPills status={(row.original as TripList).status} />
                                             :
                                             flexRender(cell.column.columnDef.cell, cell.getContext())
                                         }

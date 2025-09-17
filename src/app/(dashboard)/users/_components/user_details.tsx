@@ -39,7 +39,7 @@ export const UserDetails = ({children , id , user_info} : Props) => {
                             {id}
                         </SheetTitle>
                         <SheetDescription>
-                            {user_info.email}
+                            {user_info.user_email}
                         </SheetDescription>
                     </div>
                 </SheetHeader>
