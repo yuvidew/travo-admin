@@ -87,35 +87,27 @@ export type User = {
     picture: string
 }
 
-export type Payment = {
+export type TripList = {
     id: number
-    amount: number,
+    price: number,
     user_name: string,
     status: "pending" | "processing" | "success" | "failed"
-    email: string,
+    user_email: string,
     booked_trips: number
 }
 
 export type TripWithBooking = {
-    id: number;
-    admin_id: number;
-    country: string;
-    group_type: string;
-    travel_style: string;
-    interest: string;
-    budget_estimate: string;
-    created_at: string;   // ISO date string
-    is_published: number; // 0 | 1
-    result : TripResult;
-    images : string[]; 
-    booking : {
-        user_name: string;
-        email: string;
-        price: string;
-        start_date: string;   // ISO date string
-        end_date: string;     // ISO date string
-        status: "pending" | "confirmed" | "cancelled";
-        booking_date: string; // ISO date string
-        destination: string;
-    }
+
+    booking_id: number;
+    user_id: number;
+    price: string;
+    start_date: string; // ISO Date
+    end_date: string;   // ISO Date
+    status: string;
+    booking_date: string; // ISO Date
+    destination: string;
+    user_name: string;
+    user_email: string;
+    trips: Trip[];
+
 };

@@ -18,11 +18,17 @@ api.interceptors.request.use(async (config) => {
     return config;
 });
 
+type ResponseType = {
+    code : number,
+    success : boolean,
+    trips: TripWithBooking[]
+}
+
 export const onGetBookedTrips = async() => {
     try {
-        const {data , status} = await api.get(endPoints.book_trip);
+        const {data , status} = await api.get<ResponseType>(endPoints.book_trip);
         if(status === 200){
-            return data.trips as TripWithBooking[];
+            return data.trips;
         }
     } catch (error) {
         console.error("Error fetching booked trips", error);
