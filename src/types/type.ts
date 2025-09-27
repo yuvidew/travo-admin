@@ -88,12 +88,14 @@ export type User = {
 }
 
 export type TripList = {
-    id: number
+    id?: number
+    booking_id?: number
     price: number,
     user_name: string,
     status: "pending" | "processing" | "success" | "failed"
     user_email: string,
-    booked_trips: number
+    booked_trips: number,
+    trips : {trip_id : number}[]
 }
 
 export type TripWithBooking = {

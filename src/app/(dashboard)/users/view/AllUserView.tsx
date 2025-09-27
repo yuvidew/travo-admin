@@ -78,6 +78,7 @@ export const AllUserView = () => {
                 status,
                 user_email: booking.user_email,
                 booked_trips: booking.trips?.length ?? 0,
+                trips : booking.trips 
             };
 
             return row;
@@ -123,13 +124,13 @@ export const AllUserView = () => {
             header: "View",
             cell: ({ row }) => (
                 <UserDetails
-                    id={row.original.id}
+                    id={row.original.id!}
                     user_info={row.original}
                 >
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => console.log("View clicked:", row.original.id)}
+                        onClick={() => console.log("View clicked:", row.original.trips)}
                     >
                         <SquareArrowOutUpRight />
                     </Button>

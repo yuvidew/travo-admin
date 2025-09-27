@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { Payment } from '@/types/type'
+import { TripList } from '@/types/type'
 import React from 'react'
 
 
@@ -10,7 +10,7 @@ import React from 'react'
  * @param {Payment["status"]} props.status - The current payment status ("pending" | "processing" | "success" | "failed")
  */
 
-export const StatusPills = ({ status }: { status: Payment["status"] }) => {
+export const StatusPills = ({ status }: { status: TripList["status"] }) => {
     return (
         <Badge variant={status} className=' capitalize'>
             {status}
