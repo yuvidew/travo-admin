@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+"use client "
+import React, { ReactNode, useEffect } from 'react';
 
 import {
     Sheet,
@@ -8,12 +9,14 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { Payment } from '@/types/type';
+import { TripList } from '@/types/type';
+import { useGetBookedTripsByIds } from '../hook/useGetBookedTripsByIds';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Props {
     children : ReactNode,
     id : number,
-    user_info : Payment
+    user_info : TripList
 }
 
 /**
@@ -27,12 +30,32 @@ interface Props {
 
 
 export const UserDetails = ({children , id , user_info} : Props) => {
-    // TODO : Call the API to list a user's booked trips
+    const {mutate , isPending , isError} = useGetBookedTripsByIds()
+
+    console.log("the asd");
+    useEffect(() => {
+        mutate(user_info.trips)
+    } , []);
+
+
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent>
                 <SheetHeader>
+                    {isError ? (
+                        <div className=' flex flex-col gap-2'>
+                            <SheetTitle>
+                                Failed to fetch data
+                            </SheetTitle>
+                        </div>
+                    ) : isPending ? (
+                        <div className=' flex flex-col gap-2'>
+                            {[1, 2, 3, 4].map((item) => (
+                                <Skeleton key={item} className=' h-12 w-full' />
+                            ))}
+                        </div>
+                    ) : (
                     <div className='flex flex-col gap-0'>
                         <SheetTitle>
                             {user_info.user_name} {" "}
@@ -42,6 +65,8 @@ export const UserDetails = ({children , id , user_info} : Props) => {
                             {user_info.user_email}
                         </SheetDescription>
                     </div>
+
+                    )}
                 </SheetHeader>
             </SheetContent>
         </Sheet>

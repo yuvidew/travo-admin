@@ -20,6 +20,7 @@ export const endPoints = {
   get_trip_by_id : `${base_url}/trip/get-trip-by-id`,
   update_trip_publish_by_id : `${base_url}/trip/update-trip-publish`,
   book_trip : `${base_url}/trip/admin/booked-trips`,
+  get_booked_trips_by_ids : `${base_url}/trip/admin/get-booked-trips-by-ids`
 }
 
 export function cn(...inputs: ClassValue[]) {

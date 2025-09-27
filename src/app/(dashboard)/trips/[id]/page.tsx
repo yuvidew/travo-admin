@@ -12,7 +12,7 @@ const TripDetailsPage = async({ params }: { params: { id: string } }) => {
 
     await queryClient.prefetchQuery({
         queryKey : ["get-trips-by-id" , id],
-        queryFn : () => onGetTripById(id,)
+        queryFn : () => onGetTripById(id)
     })
 
     return (
